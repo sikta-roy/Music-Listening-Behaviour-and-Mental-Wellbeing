@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────
 // CONFIG — paste your Apps Script web app URL here
 // ─────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwV-2-UfaAhGTSOxwyiN5Oxd8yijLGPpBafVllo7LJcNYHYnhbRoSHYHnyaGKnoZCA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMQoCeNw1-sGT59-SUaeC8uaHvElty_CrPeI_I5SkjIhiWRlCdp4NFzYS901U2_OcEYg/exec';
 
 // ─────────────────────────────────────────────
 // QUESTIONNAIRE DATA
