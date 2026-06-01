@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────
 // CONFIG — paste your Apps Script web app URL here
 // ─────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwV-2-UfaAhGTSOxwyiN5Oxd8yijLGPpBafVllo7LJcNYHYnhbRoSHYHnyaGKnoZCA/exec';
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 
 // ─────────────────────────────────────────────
 // QUESTIONNAIRE DATA
@@ -37,27 +37,36 @@ const DASS21 = {
   ]
 };
 
+// Full validated MPQ-R (Nater, 2003)
 const MPQ_R = {
-  title: "MPQ-R (Music Preference)",
-  instruction: "How much do you like each of the following music genres? Rate on a scale from 1 (Strongly Dislike) to 7 (Strongly Like).",
-  scale: ["1\nStrongly Dislike", "2", "3", "4\nNeutral", "5", "6", "7\nStrongly Like"],
-  scaleShort: ["1", "2", "3", "4", "5", "6", "7"],
-  items: [
-    "Classical (e.g. Beethoven, Mozart, Bach)",
-    "Jazz (e.g. Miles Davis, John Coltrane)",
-    "Blues (e.g. B.B. King, Muddy Waters)",
-    "Folk / Country (e.g. Johnny Cash, Taylor Swift early)",
-    "Rock (e.g. Led Zeppelin, AC/DC)",
-    "Alternative / Indie (e.g. Radiohead, Arctic Monkeys)",
-    "Heavy Metal (e.g. Metallica, Black Sabbath)",
-    "Pop (e.g. Ed Sheeran, Katy Perry)",
-    "R&B / Soul (e.g. Beyoncé, Marvin Gaye)",
-    "Hip-Hop / Rap (e.g. Kendrick Lamar, Eminem)",
-    "Electronic / Dance (e.g. Daft Punk, Calvin Harris)",
-    "World Music (e.g. Latin, Afrobeats, Bollywood)",
-    "Ambient / New Age (e.g. Brian Eno, Enya)",
-    "Reggae (e.g. Bob Marley, Damian Marley)",
-    "Punk (e.g. The Clash, Sex Pistols)"
+  // Section 1: Music style preferences (1–5)
+  styles: [
+    { label: "Pop", example: "e.g. hit parade" },
+    { label: "Rock", example: "e.g. Indie, Alternative" },
+    { label: "Hip Hop", example: "e.g. Rap" },
+    { label: "Latin", example: "e.g. Tango, Salsa" },
+    { label: "Soul / Funk", example: "e.g. R'n'B" },
+    { label: "Hard Rock", example: "e.g. Heavy Metal, Crossover" },
+    { label: "Electronic Music", example: "e.g. Techno, House" },
+    { label: "New Age", example: "e.g. Meditation Music" },
+    { label: "Folk Music", example: "e.g. Country, Folk" },
+    { label: "Classical Music", example: "e.g. Baroque, Romance, Opera" },
+    { label: "Jazz / Blues", example: "" }
+  ],
+  // Section 4: Purposes (1–5)
+  purposes: [
+    "Relaxation", "Activation", "Distraction",
+    "To reduce aggression", "To work better",
+    "To evoke certain feelings", "To increase certain feelings",
+    "Against boredom", "Against loneliness", "Because of the music"
+  ],
+  // Section 5: Situations (1–5)
+  situations: [
+    "Disco / Club", "Techno Party",
+    "Concerts (Rock / Pop)", "Concerts (Classical / Opera)",
+    "As background activity when doing something else (e.g. sports, housework, on the move)",
+    "When making music myself (e.g. singing)",
+    "When I'm alone", "When I'm with friends"
   ]
 };
 
@@ -270,7 +279,7 @@ function renderConsent() {
       <p>Participation is entirely voluntary. You may skip any question or withdraw at any point. This study poses no known physical or psychological risk beyond normal daily activity.</p>
 
       <h3 style="margin-top:1rem;">Contact</h3>
-      <p>For questions regarding this study, please contact Sikta Roy at +91 91635 04945.</p>
+      <p>For questions regarding this study, please contact the research team at NIT Calicut, Department of Computer Science &amp; Engineering.</p>
     </div>
     <label class="consent-checkbox">
       <input type="checkbox" id="consent-check" ${state.consent ? 'checked' : ''}>
@@ -314,29 +323,255 @@ function renderDASS21() {
   </div>`;
 }
 
+function scaleButtons(key, subkey, index, val, max, labels) {
+  return Array.from({length: max}, (_, i) => {
+    const v = i + 1;
+    const sel = (state.mpqr_data[key] && state.mpqr_data[key][subkey] !== undefined
+      ? state.mpqr_data[key][subkey]
+      : (state.mpqr_data[key] && state.mpqr_data[key][index])) === v;
+    return `<button class="scale-btn ${sel ? 'selected' : ''}"
+      onclick="setMPQR('${key}','${subkey !== undefined ? subkey : index}',${v})">${labels ? labels[i] : v}</button>`;
+  }).join('');
+}
+
+function setMPQR(key, subkey, value) {
+  if (!state.mpqr_data[key]) state.mpqr_data[key] = {};
+  state.mpqr_data[key][subkey] = value;
+  render();
+}
+
 function renderMPQR() {
-  const answers = state.mpqr;
-  const items = MPQ_R.items.map((q, i) => `
+  const d = state.mpqr_data;
+
+  // Section 1 — style preferences
+  const styleRows = MPQ_R.styles.map((s, i) => `
     <div class="q-item">
-      <div class="q-text"><span class="q-num">${i + 1}.</span> ${q}</div>
+      <div class="q-text"><strong>${s.label}</strong>${s.example ? `<span style="color:var(--text3); font-size:13px; margin-left:6px;">${s.example}</span>` : ''}</div>
       <div class="scale-options">
-        ${MPQ_R.scaleShort.map((label, v) => `
-          <button class="scale-btn ${answers[i] === (v + 1) ? 'selected' : ''}"
-            onclick="setAnswer('mpqr', ${i}, ${v + 1})">
-            ${v === 0 ? 'Strongly<br>Dislike' : v === 3 ? 'Neutral' : v === 6 ? 'Strongly<br>Like' : (v + 1)}
-          </button>`).join('')}
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.styles && d.styles[i] === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('styles',${i},${v})">
+            ${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
+        }).join('')}
       </div>
     </div>`).join('');
-  const answered = answers.filter(a => a !== undefined).length;
+
+  // Section 1 other (2 open fields)
+  const other1a = (d.other_style1 || {});
+  const other1b = (d.other_style2 || {});
+
+  // Section 2 — favourite music
+  const fav = d.favourite || {};
+
+  // Section 3 — daily listening
+  const dl = d.daily_listening || {};
+
+  // Section 4 — purposes
+  const purposeRows = MPQ_R.purposes.map((p, i) => `
+    <div class="q-item">
+      <div class="q-text">${p}</div>
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.purposes && d.purposes[i] === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('purposes',${i},${v})">
+            ${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+
+  // Section 5 — situations
+  const situationRows = MPQ_R.situations.map((s, i) => `
+    <div class="q-item">
+      <div class="q-text">${s}</div>
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.situations && d.situations[i] === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('situations',${i},${v})">
+            ${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+
+  // Section 6 — currently making music
+  const cm = d.current_music || '';
+  // Section 7 — previously making music
+  const pm = d.prev_music || '';
+
+  // Section 8 — importance
+  const imp = d.importance;
+  const impBtns = [1,2,3,4,5].map(v => {
+    const sel = imp === v;
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('importance',${v})">
+      ${v === 1 ? 'Not at all' : v === 5 ? 'Very important' : v}</button>`;
+  }).join('');
+
+  // Section 9 — chills
+  const chillFreq = d.chill_freq;
+  const chillInt = d.chill_int;
+  const chillFreqBtns = [1,2,3,4,5].map(v => {
+    const sel = chillFreq === v;
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('chill_freq',${v})">
+      ${v === 1 ? 'Not at all' : v === 5 ? 'Almost always' : v}</button>`;
+  }).join('');
+  const chillIntBtns = [1,2,3,4,5].map(v => {
+    const sel = chillInt === v;
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('chill_int',${v})">
+      ${v === 1 ? 'Hardly noticeable' : v === 5 ? 'Overwhelmingly strong' : v}</button>`;
+  }).join('');
+
   return `
   <div class="card">
     <div class="step-tag">Step 4 of 11 — MPQ-R</div>
     <h2>Music Preference Questionnaire</h2>
-    <p>${MPQ_R.instruction}</p>
-    <p style="font-size:13px; color: var(--text3);">Answered: ${answered} / ${MPQ_R.items.length}</p>
+    <p style="font-size:13px; color:var(--text3);">© Urs Nater (2003). All rights reserved.</p>
+    <p>The following questions refer to which music you like to listen to and in which situations you do so.</p>
+
     <div class="divider"></div>
-    ${items}
-    <div id="q-error" class="error-msg" style="display:none; margin-top:1rem;">Please answer all questions before proceeding.</div>
+    <div class="q-section-title">1. Music Style Preferences — rate each style (1 = Not at all · 5 = Very much)</div>
+    ${styleRows}
+    <div class="q-item">
+      <div class="q-text">Other style 1 (optional)</div>
+      <input type="text" placeholder="Genre name" style="margin-bottom:8px;"
+        value="${d.other_style1_name || ''}" oninput="setMPQRSingle('other_style1_name',this.value)">
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.other_style1_rating === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_style1_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-text">Other style 2 (optional)</div>
+      <input type="text" placeholder="Genre name" style="margin-bottom:8px;"
+        value="${d.other_style2_name || ''}" oninput="setMPQRSingle('other_style2_name',this.value)">
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.other_style2_rating === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_style2_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">2. Favourite Music / Group (max. 3)</div>
+    <div class="form-group">
+      <label>Favourite music / group</label>
+      <input type="text" placeholder="e.g. A.R. Rahman, The Beatles" value="${d.fav_name || ''}"
+        oninput="setMPQRSingle('fav_name',this.value)">
+    </div>
+    <div class="form-group">
+      <label>Music style category</label>
+      <input type="text" placeholder="e.g. Classical, Pop, Rock" value="${d.fav_style || ''}"
+        oninput="setMPQRSingle('fav_style',this.value)">
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">3. Daily Listening Duration</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hours per day</label>
+        <input type="number" min="0" max="24" placeholder="0" value="${d.daily_hours || ''}"
+          oninput="setMPQRSingle('daily_hours',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Minutes</label>
+        <input type="number" min="0" max="59" placeholder="0" value="${d.daily_mins || ''}"
+          oninput="setMPQRSingle('daily_mins',this.value)">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">4. Purposes of Listening — rate each (1 = Never · 5 = Very often)</div>
+    ${purposeRows}
+    <div class="q-item">
+      <div class="q-text">Other purpose 1 (optional)</div>
+      <input type="text" placeholder="Describe purpose" style="margin-bottom:8px;"
+        value="${d.other_purpose1_name || ''}" oninput="setMPQRSingle('other_purpose1_name',this.value)">
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.other_purpose1_rating === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_purpose1_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">5. Situations / Occasions — rate each (1 = Never · 5 = Very often)</div>
+    ${situationRows}
+    <div class="q-item">
+      <div class="q-text">Other situation (optional)</div>
+      <input type="text" placeholder="Describe situation" style="margin-bottom:8px;"
+        value="${d.other_situation_name || ''}" oninput="setMPQRSingle('other_situation_name',this.value)">
+      <div class="scale-options">
+        ${[1,2,3,4,5].map(v => {
+          const sel = d.other_situation_rating === v;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_situation_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">6. Currently Making Music</div>
+    <div class="form-group">
+      ${['No',
+        'I play an instrument',
+        'I sing in a choir',
+        'Other'].map(opt => `
+        <label class="consent-checkbox" style="margin-bottom:8px;">
+          <input type="radio" name="current_music" value="${opt}" ${d.current_music === opt ? 'checked' : ''}
+            onchange="setMPQRSingle('current_music','${opt}')">
+          <span>${opt}</span>
+        </label>`).join('')}
+    </div>
+    ${d.current_music && d.current_music !== 'No' ? `
+    <div class="form-group">
+      <label>Details (instrument / choir / other, and how long?)</label>
+      <input type="text" placeholder="e.g. Guitar — 5 years" value="${d.current_music_detail || ''}"
+        oninput="setMPQRSingle('current_music_detail',this.value)">
+    </div>` : ''}
+
+    <div class="divider"></div>
+    <div class="q-section-title">7. Previously Making Music</div>
+    <div class="form-group">
+      ${['No',
+        'I played an instrument',
+        'I was in a choir',
+        'Other'].map(opt => `
+        <label class="consent-checkbox" style="margin-bottom:8px;">
+          <input type="radio" name="prev_music" value="${opt}" ${d.prev_music === opt ? 'checked' : ''}
+            onchange="setMPQRSingle('prev_music','${opt}')">
+          <span>${opt}</span>
+        </label>`).join('')}
+    </div>
+    ${d.prev_music && d.prev_music !== 'No' ? `
+    <div class="form-group">
+      <label>Details (instrument / choir / other, and how long?)</label>
+      <input type="text" placeholder="e.g. Tabla — 3 years" value="${d.prev_music_detail || ''}"
+        oninput="setMPQRSingle('prev_music_detail',this.value)">
+    </div>` : ''}
+
+    <div class="divider"></div>
+    <div class="q-section-title">8. Importance of Music in Your Life</div>
+    <div class="q-item">
+      <div class="q-text">How important is music in your life?</div>
+      <div class="scale-options">${impBtns}</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="q-section-title">9. Music-Induced Chills</div>
+    <p style="font-size:14px; color:var(--text2); margin-bottom:1rem;">
+      Chills are physical reactions — a shudder or shiver spreading from the head to the back and/or other parts of the body — experienced while listening to music.
+    </p>
+    <div class="q-item">
+      <div class="q-text">How often do you experience chills while listening to music?</div>
+      <div class="scale-options">${chillFreqBtns}</div>
+    </div>
+    <div class="q-item">
+      <div class="q-text">If you experience chills, how intense are they?</div>
+      <div class="scale-options">${chillIntBtns}</div>
+    </div>
+
+    <div id="q-error" class="error-msg" style="display:none; margin-top:1rem;">Please complete all required sections before proceeding.</div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="setStep(3)">&larr; Back</button>
       <button class="btn btn-primary" id="q-next">Next &rarr;</button>
@@ -567,15 +802,22 @@ function bindEvents() {
   if (qNext) {
     qNext.onclick = () => {
       const nextStep = parseInt(qNext.dataset.next || '0');
-      let key, length;
-      if (state.step === 3) { key = 'dass21'; length = DASS21.items.length; }
-      else if (state.step === 4) { key = 'mpqr'; length = MPQ_R.items.length; }
-      else if (state.step === 5) { key = 'panas1'; length = PANAS.items.length; }
-      else if (state.step === 6) { key = 'rrs1'; length = RRS.items.length; }
-      else if (state.step === 9) { key = 'panas2'; length = PANAS.items.length; }
-      else if (state.step === 10) { key = 'rrs2'; length = RRS.items.length; }
-      const answers = state[key];
-      const allAnswered = answers.filter(a => a !== undefined).length === length;
+      let allAnswered = false;
+      if (state.step === 3) {
+        allAnswered = state.dass21.filter(a => a !== undefined).length === DASS21.items.length;
+      } else if (state.step === 4) {
+        const stylesOk = state.mpqr_data.styles && state.mpqr_data.styles.filter(a => a !== undefined).length === MPQ_R.styles.length;
+        const impOk = state.mpqr_data.importance !== undefined;
+        allAnswered = stylesOk && impOk;
+      } else if (state.step === 5) {
+        allAnswered = state.panas1.filter(a => a !== undefined).length === PANAS.items.length;
+      } else if (state.step === 6) {
+        allAnswered = state.rrs1.filter(a => a !== undefined).length === RRS.items.length;
+      } else if (state.step === 9) {
+        allAnswered = state.panas2.filter(a => a !== undefined).length === PANAS.items.length;
+      } else if (state.step === 10) {
+        allAnswered = state.rrs2.filter(a => a !== undefined).length === RRS.items.length;
+      }
       if (!allAnswered) { document.getElementById('q-error').style.display = 'block'; return; }
       const next = nextStep || (state.step + 1);
       setStep(next);
@@ -684,7 +926,6 @@ async function saveData() {
   const d = state.dass21;
   const p1 = state.panas1, p2 = state.panas2;
   const r1 = state.rrs1, r2 = state.rrs2;
-  const m = state.mpqr;
 
   const dass_depression = [2,4,9,12,15,16,20].reduce((s,i) => s + (d[i]||0), 0) * 2;
   const dass_anxiety = [1,3,6,8,14,18,19].reduce((s,i) => s + (d[i]||0), 0) * 2;
@@ -708,9 +949,23 @@ async function saveData() {
     dass_stress,
     dass21_raw: d.join('|'),
 
-    // MPQ-R
-    mpqr_raw: m.join('|'),
-    mpqr_avg: m.length ? (m.reduce((s,v) => s + (v||0), 0) / m.length).toFixed(2) : 0,
+    // MPQ-R (full)
+    mpqr_styles: (state.mpqr_data.styles || []).join('|'),
+    mpqr_purposes: (state.mpqr_data.purposes || []).join('|'),
+    mpqr_situations: (state.mpqr_data.situations || []).join('|'),
+    mpqr_fav_name: state.mpqr_data.fav_name || '',
+    mpqr_fav_style: state.mpqr_data.fav_style || '',
+    mpqr_daily_hours: state.mpqr_data.daily_hours || '',
+    mpqr_daily_mins: state.mpqr_data.daily_mins || '',
+    mpqr_current_music: state.mpqr_data.current_music || '',
+    mpqr_current_music_detail: state.mpqr_data.current_music_detail || '',
+    mpqr_prev_music: state.mpqr_data.prev_music || '',
+    mpqr_prev_music_detail: state.mpqr_data.prev_music_detail || '',
+    mpqr_importance: state.mpqr_data.importance || '',
+    mpqr_chill_freq: state.mpqr_data.chill_freq || '',
+    mpqr_chill_int: state.mpqr_data.chill_int || '',
+    mpqr_other_style1: (state.mpqr_data.other_style1_name || '') + ':' + (state.mpqr_data.other_style1_rating || ''),
+    mpqr_other_style2: (state.mpqr_data.other_style2_name || '') + ':' + (state.mpqr_data.other_style2_rating || ''),
 
     // PANAS
     panas1_PA: pa1, panas1_NA: na1,
@@ -768,10 +1023,25 @@ window.setStep = function(n) {
 
 // Initial state arrays
 state.dass21 = new Array(21).fill(undefined);
-state.mpqr = new Array(15).fill(undefined);
+state.mpqr_data = { styles: new Array(11).fill(undefined) };
 state.panas1 = new Array(20).fill(undefined);
 state.rrs1 = new Array(10).fill(undefined);
 state.panas2 = new Array(20).fill(undefined);
 state.rrs2 = new Array(10).fill(undefined);
 
 setStep(0);
+
+// ─────────────────────────────────────────────
+// MPQ-R HELPERS
+// ─────────────────────────────────────────────
+function setMPQRArr(key, index, value) {
+  if (!state.mpqr_data[key]) state.mpqr_data[key] = [];
+  state.mpqr_data[key][index] = value;
+  render();
+}
+
+function setMPQRSingle(key, value) {
+  state.mpqr_data[key] = value;
+  // Only re-render for radio/scale changes, not text inputs
+  if (typeof value !== 'string' || value.length <= 2) render();
+}
