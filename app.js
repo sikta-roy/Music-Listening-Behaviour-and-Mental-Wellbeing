@@ -653,10 +653,10 @@ function renderCogTest1() {
     <h2>Stroop Colour–Word Task</h2>
     <p>This is a classic cognitive test measuring attention and processing speed. Follow the on-screen instructions within the task window below. Complete the entire task before clicking Next.</p>
     <div class="warn-box">
-      <strong>Note:</strong> The task opens in the frame below. If it does not load, you can <a href="https://www.psytoolkit.org/experiment-library/stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
+      <strong>Note:</strong> The task opens in the frame below. If it does not load, you can <a href="https://www.psytoolkit.org/experiment-library/experiment_stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
     </div>
     <div class="iframe-wrap">
-      <iframe src="https://www.psytoolkit.org/experiment-library/stroop.html" allowfullscreen></iframe>
+      <iframe src="https://www.psytoolkit.org/experiment-library/experiment_stroop.html" allowfullscreen></iframe>
     </div>
     <p class="iframe-note">Complete the full task above, then click Next to continue.</p>
     <div class="btn-row">
@@ -709,10 +709,10 @@ function renderCogTest2() {
     <h2>Numerical Stroop Task</h2>
     <p>One more cognitive test. Follow the on-screen instructions in the task window below. Complete the entire task before clicking Finish.</p>
     <div class="warn-box">
-      <strong>Note:</strong> If the task does not load, you can <a href="https://www.psytoolkit.org/experiment-library/numerical_stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
+      <strong>Note:</strong> If the task does not load, you can <a href="https://www.psytoolkit.org/experiment-library/experiment_numerical_stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
     </div>
     <div class="iframe-wrap">
-      <iframe src="https://www.psytoolkit.org/experiment-library/numerical_stroop.html" allowfullscreen></iframe>
+      <iframe src="https://www.psytoolkit.org/experiment-library/experiment_numerical_stroop.html" allowfullscreen></iframe>
     </div>
     <p class="iframe-note">Complete the full task above, then click Finish to submit your data.</p>
     <div class="btn-row">
