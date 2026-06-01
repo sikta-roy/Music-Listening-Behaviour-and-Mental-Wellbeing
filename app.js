@@ -84,20 +84,20 @@ const PANAS = {
 
 const RRS = {
   title: "RRS-10 (Ruminative Response Scale)",
-  instruction: "People think and do many different things when they feel sad or depressed. Rate how often you do each of the following when you are sad or depressed.",
+  instruction: "We all think and act differently. Below are some phrases that describe what we may think or do when we feel low. Reflecting on your experiences over the past few days (or a recent experience), please indicate what you generally think or do:",
   scale: ["Almost Never (1)", "Sometimes (2)", "Often (3)", "Almost Always (4)"],
   scaleShort: ["1", "2", "3", "4"],
   items: [
-    "Think about how alone you feel",
-    "Think 'I won't be able to do my job if I don't snap out of this'",
-    "Think about your feelings of fatigue and achiness",
-    "Think about how hard it is to concentrate",
-    "Think 'What am I doing to deserve this?'",
-    "Think about how passive and unmotivated you feel",
-    "Analyze your personality to try to understand why you are depressed",
-    "Go someplace alone to think about your feelings",
-    "Think about how angry you are with yourself",
-    "Think 'Why do I always react this way?'"
+    "Think «What am I doing to deserve this?»",
+    "Analyze recent events to try to understand why you are depressed.",
+    "Think «Why do I always react this way?»",
+    "Go away by yourself and think about why you feel this way.",
+    "Write down what you are thinking about and analyze it.",
+    "Think about a recent situation, wishing it had gone better.",
+    "Think «Why do I have problems other people don't have?»",
+    "Think «Why can't I handle things better?»",
+    "Analyze your personality to try to understand why you are depressed.",
+    "Go someplace alone to think about your feelings."
   ]
 };
 
@@ -347,10 +347,10 @@ function renderMPQR() {
   const styleRows = MPQ_R.styles.map((s, i) => `
     <div class="q-item">
       <div class="q-text"><strong>${s.label}</strong>${s.example ? `<span style="color:var(--text3); font-size:13px; margin-left:6px;">${s.example}</span>` : ''}</div>
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="styles-${i}">
         ${[1,2,3,4,5].map(v => {
           const sel = d.styles && d.styles[i] === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('styles',${i},${v})">
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRArr('styles',${i},${v})">
             ${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
         }).join('')}
       </div>
@@ -370,10 +370,10 @@ function renderMPQR() {
   const purposeRows = MPQ_R.purposes.map((p, i) => `
     <div class="q-item">
       <div class="q-text">${p}</div>
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="purposes-${i}">
         ${[1,2,3,4,5].map(v => {
           const sel = d.purposes && d.purposes[i] === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('purposes',${i},${v})">
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRArr('purposes',${i},${v})">
             ${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
         }).join('')}
       </div>
@@ -383,10 +383,10 @@ function renderMPQR() {
   const situationRows = MPQ_R.situations.map((s, i) => `
     <div class="q-item">
       <div class="q-text">${s}</div>
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="situations-${i}">
         ${[1,2,3,4,5].map(v => {
           const sel = d.situations && d.situations[i] === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRArr('situations',${i},${v})">
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRArr('situations',${i},${v})">
             ${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
         }).join('')}
       </div>
@@ -401,7 +401,7 @@ function renderMPQR() {
   const imp = d.importance;
   const impBtns = [1,2,3,4,5].map(v => {
     const sel = imp === v;
-    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('importance',${v})">
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('importance',${v})">
       ${v === 1 ? 'Not at all' : v === 5 ? 'Very important' : v}</button>`;
   }).join('');
 
@@ -410,12 +410,12 @@ function renderMPQR() {
   const chillInt = d.chill_int;
   const chillFreqBtns = [1,2,3,4,5].map(v => {
     const sel = chillFreq === v;
-    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('chill_freq',${v})">
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('chill_freq',${v})">
       ${v === 1 ? 'Not at all' : v === 5 ? 'Almost always' : v}</button>`;
   }).join('');
   const chillIntBtns = [1,2,3,4,5].map(v => {
     const sel = chillInt === v;
-    return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('chill_int',${v})">
+    return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('chill_int',${v})">
       ${v === 1 ? 'Hardly noticeable' : v === 5 ? 'Overwhelmingly strong' : v}</button>`;
   }).join('');
 
@@ -433,10 +433,10 @@ function renderMPQR() {
       <div class="q-text">Other style 1 (optional)</div>
       <input type="text" placeholder="Genre name" style="margin-bottom:8px;"
         value="${d.other_style1_name || ''}" oninput="setMPQRSingle('other_style1_name',this.value)">
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="other_style1_rating">
         ${[1,2,3,4,5].map(v => {
           const sel = d.other_style1_rating === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_style1_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('other_style1_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
         }).join('')}
       </div>
     </div>
@@ -444,10 +444,10 @@ function renderMPQR() {
       <div class="q-text">Other style 2 (optional)</div>
       <input type="text" placeholder="Genre name" style="margin-bottom:8px;"
         value="${d.other_style2_name || ''}" oninput="setMPQRSingle('other_style2_name',this.value)">
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="other_style2_rating">
         ${[1,2,3,4,5].map(v => {
           const sel = d.other_style2_rating === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_style2_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('other_style2_rating',${v})">${v === 1 ? 'Not at all' : v === 5 ? 'Very much' : v}</button>`;
         }).join('')}
       </div>
     </div>
@@ -487,10 +487,10 @@ function renderMPQR() {
       <div class="q-text">Other purpose 1 (optional)</div>
       <input type="text" placeholder="Describe purpose" style="margin-bottom:8px;"
         value="${d.other_purpose1_name || ''}" oninput="setMPQRSingle('other_purpose1_name',this.value)">
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="other_purpose1_rating">
         ${[1,2,3,4,5].map(v => {
           const sel = d.other_purpose1_rating === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_purpose1_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('other_purpose1_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
         }).join('')}
       </div>
     </div>
@@ -502,10 +502,10 @@ function renderMPQR() {
       <div class="q-text">Other situation (optional)</div>
       <input type="text" placeholder="Describe situation" style="margin-bottom:8px;"
         value="${d.other_situation_name || ''}" oninput="setMPQRSingle('other_situation_name',this.value)">
-      <div class="scale-options">
+      <div class="scale-options" data-mpqr-group="other_situation_rating">
         ${[1,2,3,4,5].map(v => {
           const sel = d.other_situation_rating === v;
-          return `<button class="scale-btn ${sel ? 'selected' : ''}" onclick="setMPQRSingle('other_situation_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
+          return `<button class="scale-btn ${sel ? 'selected' : ''}" data-val="${v}" onclick="setMPQRSingle('other_situation_rating',${v})">${v === 1 ? 'Never' : v === 5 ? 'Very often' : v}</button>`;
         }).join('')}
       </div>
     </div>
@@ -519,16 +519,17 @@ function renderMPQR() {
         'Other'].map(opt => `
         <label class="consent-checkbox" style="margin-bottom:8px;">
           <input type="radio" name="current_music" value="${opt}" ${d.current_music === opt ? 'checked' : ''}
-            onchange="setMPQRSingle('current_music','${opt}')">
+            onchange="handleMusicRadio('current_music','${opt}')">
           <span>${opt}</span>
         </label>`).join('')}
     </div>
-    ${d.current_music && d.current_music !== 'No' ? `
-    <div class="form-group">
-      <label>Details (instrument / choir / other, and how long?)</label>
-      <input type="text" placeholder="e.g. Guitar — 5 years" value="${d.current_music_detail || ''}"
-        oninput="setMPQRSingle('current_music_detail',this.value)">
-    </div>` : ''}
+    <div id="current_music-detail-wrap" style="display:${d.current_music && d.current_music !== 'No' ? 'block' : 'none'};">
+      <div class="form-group">
+        <label>Details (instrument / choir / other, and how long?)</label>
+        <input type="text" placeholder="e.g. Guitar — 5 years" value="${d.current_music_detail || ''}"
+          oninput="setMPQRSingle('current_music_detail',this.value)">
+      </div>
+    </div>
 
     <div class="divider"></div>
     <div class="q-section-title">7. Previously Making Music</div>
@@ -539,22 +540,23 @@ function renderMPQR() {
         'Other'].map(opt => `
         <label class="consent-checkbox" style="margin-bottom:8px;">
           <input type="radio" name="prev_music" value="${opt}" ${d.prev_music === opt ? 'checked' : ''}
-            onchange="setMPQRSingle('prev_music','${opt}')">
+            onchange="handleMusicRadio('prev_music','${opt}')">
           <span>${opt}</span>
         </label>`).join('')}
     </div>
-    ${d.prev_music && d.prev_music !== 'No' ? `
-    <div class="form-group">
-      <label>Details (instrument / choir / other, and how long?)</label>
-      <input type="text" placeholder="e.g. Tabla — 3 years" value="${d.prev_music_detail || ''}"
-        oninput="setMPQRSingle('prev_music_detail',this.value)">
-    </div>` : ''}
+    <div id="prev_music-detail-wrap" style="display:${d.prev_music && d.prev_music !== 'No' ? 'block' : 'none'};">
+      <div class="form-group">
+        <label>Details (instrument / choir / other, and how long?)</label>
+        <input type="text" placeholder="e.g. Tabla — 3 years" value="${d.prev_music_detail || ''}"
+          oninput="setMPQRSingle('prev_music_detail',this.value)">
+      </div>
+    </div>
 
     <div class="divider"></div>
     <div class="q-section-title">8. Importance of Music in Your Life</div>
     <div class="q-item">
       <div class="q-text">How important is music in your life?</div>
-      <div class="scale-options">${impBtns}</div>
+      <div class="scale-options" data-mpqr-group="importance">${impBtns}</div>
     </div>
 
     <div class="divider"></div>
@@ -564,11 +566,11 @@ function renderMPQR() {
     </p>
     <div class="q-item">
       <div class="q-text">How often do you experience chills while listening to music?</div>
-      <div class="scale-options">${chillFreqBtns}</div>
+      <div class="scale-options" data-mpqr-group="chill_freq">${chillFreqBtns}</div>
     </div>
     <div class="q-item">
       <div class="q-text">If you experience chills, how intense are they?</div>
-      <div class="scale-options">${chillIntBtns}</div>
+      <div class="scale-options" data-mpqr-group="chill_int">${chillIntBtns}</div>
     </div>
 
     <div id="q-error" class="error-msg" style="display:none; margin-top:1rem;">Please complete all required sections before proceeding.</div>
@@ -726,7 +728,7 @@ function renderThankYou() {
   const r1 = state.rrs1, r2 = state.rrs2;
   const dass_d = [2,4,9,12,15,16,20].reduce((s,i) => s + (d[i] || 0), 0) * 2;
   const dass_a = [1,3,6,8,14,18,19].reduce((s,i) => s + (d[i] || 0), 0) * 2;
-  const dass_s = [0,5,7,10,11,13,17].reduce((s,i) => s + (d[i] || 0), 0) * 2;
+  const dass_s = [0,5,7,10,11,12,17].reduce((s,i) => s + (d[i] || 0), 0) * 2;
   const pa1 = [0,2,4,8,9,11,12,15,16,18].reduce((s,i) => s + (p1[i] || 0), 0);
   const na1 = [1,3,5,6,7,10,14,15,17,19].reduce((s,i) => s + (p1[i] || 0), 0);
   const pa2 = [0,2,4,8,9,11,12,15,16,18].reduce((s,i) => s + (p2[i] || 0), 0);
@@ -1032,16 +1034,34 @@ state.rrs2 = new Array(10).fill(undefined);
 setStep(0);
 
 // ─────────────────────────────────────────────
-// MPQ-R HELPERS
+// MPQ-R HELPERS — update DOM in-place, no full re-render
 // ─────────────────────────────────────────────
 function setMPQRArr(key, index, value) {
   if (!state.mpqr_data[key]) state.mpqr_data[key] = [];
   state.mpqr_data[key][index] = value;
-  render();
+  // Update only the button group for this item
+  const group = document.querySelector(`[data-mpqr-group="${key}-${index}"]`);
+  if (group) {
+    group.querySelectorAll('button').forEach(btn => {
+      btn.classList.toggle('selected', parseInt(btn.dataset.val) === value);
+    });
+  }
 }
 
 function setMPQRSingle(key, value) {
   state.mpqr_data[key] = value;
-  // Only re-render for radio/scale changes, not text inputs
-  if (typeof value !== 'string' || value.length <= 2) render();
+  if (typeof value === 'string' && value.length > 2) return; // text input, no DOM update needed
+  // Update only the button group for this key
+  const group = document.querySelector(`[data-mpqr-group="${key}"]`);
+  if (group) {
+    group.querySelectorAll('button').forEach(btn => {
+      btn.classList.toggle('selected', parseInt(btn.dataset.val) === value);
+    });
+  }
+}
+
+function handleMusicRadio(key, value) {
+  state.mpqr_data[key] = value;
+  const detailWrap = document.getElementById(`${key}-detail-wrap`);
+  if (detailWrap) detailWrap.style.display = value === 'No' ? 'none' : 'block';
 }
