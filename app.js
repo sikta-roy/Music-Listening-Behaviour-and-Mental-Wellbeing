@@ -279,7 +279,7 @@ function renderConsent() {
       <p>Participation is entirely voluntary. You may skip any question or withdraw at any point. This study poses no known physical or psychological risk beyond normal daily activity.</p>
 
       <h3 style="margin-top:1rem;">Contact</h3>
-      <p>For questions regarding this study, please contact the research team at NIT Calicut, Department of Computer Science &amp; Engineering.</p>
+      <p>For questions regarding this study, please contact Sikta Roy at +91 91635 04945.</p>
     </div>
     <label class="consent-checkbox">
       <input type="checkbox" id="consent-check" ${state.consent ? 'checked' : ''}>
