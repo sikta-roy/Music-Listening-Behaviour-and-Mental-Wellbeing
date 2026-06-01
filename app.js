@@ -85,6 +85,7 @@ const PANAS = {
 const RRS = {
   title: "RRS-10 (Ruminative Response Scale)",
   instruction: "We all think and act differently. Below are some phrases that describe what we may think or do when we feel low. Reflecting on your experiences over the past few days (or a recent experience), please indicate what you generally think or do:",
+  instruction_post: "After engaging in the music listening activity, to what extent are you now rethinking the following items?",
   scale: ["Almost Never (1)", "Sometimes (2)", "Often (3)", "Almost Always (4)"],
   scaleShort: ["1", "2", "3", "4"],
   items: [
@@ -634,7 +635,7 @@ function renderRRS(key) {
   <div class="card">
     <div class="step-tag">${stepLabel} — RRS-10</div>
     <h2>Ruminative Response Scale</h2>
-    <p>${RRS.instruction}</p>
+    <p>${key === 'rrs1' ? RRS.instruction : RRS.instruction_post}</p>
     <p style="font-size:13px; color: var(--text3);">Answered: ${answered} / ${RRS.items.length}</p>
     <div class="divider"></div>
     ${items}
