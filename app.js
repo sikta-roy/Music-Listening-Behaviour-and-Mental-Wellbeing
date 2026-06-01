@@ -496,7 +496,7 @@ function renderMPQR() {
     </div>
 
     <div class="divider"></div>
-    <div class="q-section-title">5. Situations / Occasions — rate each (1 = Never · 5 = Very often)</div>
+    <div class="q-section-title">5. Situations / Occasions for Listening  — rate each (1 = Never · 5 = Very often)</div>
     ${situationRows}
     <div class="q-item">
       <div class="q-text">Other situation (optional)</div>
