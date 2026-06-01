@@ -969,6 +969,8 @@ async function saveData() {
     mpqr_chill_int: state.mpqr_data.chill_int || '',
     mpqr_other_style1: (state.mpqr_data.other_style1_name || '') + ':' + (state.mpqr_data.other_style1_rating || ''),
     mpqr_other_style2: (state.mpqr_data.other_style2_name || '') + ':' + (state.mpqr_data.other_style2_rating || ''),
+    mpqr_other_purpose1: (state.mpqr_data.other_purpose1_name || '') + ':' + (state.mpqr_data.other_purpose1_rating || ''),
+    mpqr_other_situation: (state.mpqr_data.other_situation_name || '') + ':' + (state.mpqr_data.other_situation_rating || ''),
 
     // PANAS
     panas1_PA: pa1, panas1_NA: na1,
