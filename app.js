@@ -270,7 +270,7 @@ function renderConsent() {
 
       <h3 style="margin-top:1rem;">Data Use &amp; Storage</h3>
       <ul>
-        <li>All data (questionnaire responses, timestamps, cognitive scores) will be stored securely in a research database.</li>
+        
         <li>Data will be anonymised before analysis and used only for academic research purposes.</li>
         <li>No personally identifiable information will be published in any report or presentation.</li>
         <li>You may withdraw at any time without consequence - simply close the browser window.</li>
