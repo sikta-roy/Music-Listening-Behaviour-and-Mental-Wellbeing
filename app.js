@@ -906,10 +906,10 @@ async function saveData() {
   const dass_anxiety = [1,3,6,8,14,18,19].reduce((s,i) => s + (d[i]||0), 0) * 2;
   const dass_stress = [0,5,7,10,11,13,17].reduce((s,i) => s + (d[i]||0), 0) * 2;
 
-  const pa1 = [0,2,4,8,9,11,12,15,16,18].reduce((s,i) => s + (p1[i]||0), 0);
-  const na1 = [1,3,5,6,7,10,14,15,17,19].reduce((s,i) => s + (p1[i]||0), 0);
-  const pa2 = [0,2,4,8,9,11,12,15,16,18].reduce((s,i) => s + (p2[i]||0), 0);
-  const na2 = [1,3,5,6,7,10,14,15,17,19].reduce((s,i) => s + (p2[i]||0), 0);
+  const pa1 = [0,2,4,8,9,11,13,15,16,18].reduce((s,i) => s + (p1[i]||0), 0);
+  const na1 = [1,3,5,6,7,10,12,14,17,19].reduce((s,i) => s + (p1[i]||0), 0);
+  const pa2 = [0,2,4,8,9,11,13,15,16,18].reduce((s,i) => s + (p2[i]||0), 0);
+  const na2 = [1,3,5,6,7,10,12,14,17,19].reduce((s,i) => s + (p2[i]||0), 0);
 
   const payload = {
     timestamp: new Date().toISOString(),
