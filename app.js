@@ -751,21 +751,7 @@ function renderThankYou() {
     </div>
     <div class="divider" style="margin-top:1.5rem;"></div>
     <p style="font-size:13px; color:var(--text3); margin-top:1rem; margin-bottom:0.5rem;">Your session summary</p>
-    <div class="score-grid">
-      <div class="score-card"><div class="label">DASS Depression</div><div class="value">${dass_d}</div></div>
-      <div class="score-card"><div class="label">DASS Anxiety</div><div class="value">${dass_a}</div></div>
-      <div class="score-card"><div class="label">DASS Stress</div><div class="value">${dass_s}</div></div>
-      <div class="score-card"><div class="label">PA Pre</div><div class="value">${pa1}</div></div>
-      <div class="score-card"><div class="label">PA Post</div><div class="value">${pa2}</div></div>
-      <div class="score-card"><div class="label">NA Pre</div><div class="value">${na1}</div></div>
-      <div class="score-card"><div class="label">NA Post</div><div class="value">${na2}</div></div>
-      <div class="score-card"><div class="label">RRS Pre</div><div class="value">${rrs1_total}</div></div>
-      <div class="score-card"><div class="label">RRS Post</div><div class="value">${rrs2_total}</div></div>
-    </div>
-    <p style="font-size:12px; color:var(--text3); margin-top:1.5rem; font-style:italic;">
-      These scores are for reference only and do not constitute a clinical assessment.
-    </p>
-  </div>`;
+    
 }
 
 // ─────────────────────────────────────────────
