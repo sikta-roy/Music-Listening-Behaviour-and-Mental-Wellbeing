@@ -266,14 +266,14 @@ function renderConsent() {
       </ul>
 
       <h3 style="margin-top:1rem;">Screen Recording</h3>
-      <p>Your screen will be recorded throughout this session. The recording will capture your responses, interaction with this website, and any visible activity on your device. Recordings are used solely for research verification and will not be shared publicly.</p>
+      <p>Your screen will be recorded during the music listening session only. The recording will capture your activity on the device during that period and will be used solely for research purposes. It will not be shared publicly.</p>
 
       <h3 style="margin-top:1rem;">Data Use &amp; Storage</h3>
       <ul>
         <li>All data (questionnaire responses, timestamps, cognitive scores) will be stored securely in a research database.</li>
         <li>Data will be anonymised before analysis and used only for academic research purposes.</li>
         <li>No personally identifiable information will be published in any report or presentation.</li>
-        <li>You may withdraw at any time without consequence — simply close the browser window.</li>
+        <li>You may withdraw at any time without consequence - simply close the browser window.</li>
       </ul>
 
       <h3 style="margin-top:1rem;">Voluntary Participation</h3>
