@@ -724,18 +724,6 @@ function renderCogTest2() {
 }
 
 function renderThankYou() {
-  const d = state.dass21;
-  const p1 = state.panas1, p2 = state.panas2;
-  const r1 = state.rrs1, r2 = state.rrs2;
-  const dass_d = [2,4,9,12,15,16,20].reduce((s,i) => s + (d[i] || 0), 0) * 2;
-  const dass_a = [1,3,6,8,14,18,19].reduce((s,i) => s + (d[i] || 0), 0) * 2;
-  const dass_s = [0,5,7,10,11,13,17].reduce((s,i) => s + (d[i] || 0), 0) * 2;
-  const pa1 = [0,2,4,8,9,11,13,15,16,18].reduce((s,i) => s + (p1[i] || 0), 0);
-  const na1 = [1,3,5,6,7,10,12,14,17,19].reduce((s,i) => s + (p1[i] || 0), 0);
-  const pa2 = [0,2,4,8,9,11,13,15,16,18].reduce((s,i) => s + (p2[i] || 0), 0);
-  const na2 = [1,3,5,6,7,10,12,14,17,19].reduce((s,i) => s + (p2[i] || 0), 0);
-  const rrs1_total = r1.reduce((s, v) => s + (v || 0), 0);
-  const rrs2_total = r2.reduce((s, v) => s + (v || 0), 0);
   return `
   <div class="card" style="text-align:center;">
     <div class="thankyou-icon">
@@ -749,9 +737,7 @@ function renderThankYou() {
       <span id="save-icon">⏳</span>
       <span id="save-text">Saving your data...</span>
     </div>
-    <div class="divider" style="margin-top:1.5rem;"></div>
-    <p style="font-size:13px; color:var(--text3); margin-top:1rem; margin-bottom:0.5rem;">Your session summary</p>
-    
+  </div>`;
 }
 
 // ─────────────────────────────────────────────
@@ -918,7 +904,7 @@ async function saveData() {
 
   const dass_depression = [2,4,9,12,15,16,20].reduce((s,i) => s + (d[i]||0), 0) * 2;
   const dass_anxiety = [1,3,6,8,14,18,19].reduce((s,i) => s + (d[i]||0), 0) * 2;
-  const dass_stress = [0,5,7,10,11,12,17].reduce((s,i) => s + (d[i]||0), 0) * 2;
+  const dass_stress = [0,5,7,10,11,13,17].reduce((s,i) => s + (d[i]||0), 0) * 2;
 
   const pa1 = [0,2,4,8,9,11,12,15,16,18].reduce((s,i) => s + (p1[i]||0), 0);
   const na1 = [1,3,5,6,7,10,14,15,17,19].reduce((s,i) => s + (p1[i]||0), 0);
