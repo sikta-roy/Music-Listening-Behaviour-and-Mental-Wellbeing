@@ -652,20 +652,20 @@ function renderCogTest1() {
   <div class="card">
     <div class="step-tag">Step 7 of 11 — Cognitive Task 1</div>
     <h2>Stroop Colour–Word Task</h2>
-    <p>This is a classic cognitive test measuring attention and processing speed. Follow the on-screen instructions within the task window below. Complete the entire task before clicking Next.</p>
-    <div class="warn-box">
-      <strong>Note:</strong> The task opens in the frame below. If it does not load, you can <a href="https://www.psytoolkit.org/experiment-library/experiment_stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
+    <p>This is a classic cognitive test measuring attention and processing speed. Click the button below to open the task in a new tab. Complete it fully, then return here and click Next.</p>
+    <div style="text-align:center; margin: 2rem 0;">
+      <a href="https://www.psytoolkit.org/experiment-library/experiment_stroop.html" target="_blank" class="btn btn-primary" style="font-size:1.1rem; padding:14px 32px; text-decoration:none;">
+        🧪 Open Stroop Task →
+      </a>
     </div>
-    <div class="iframe-wrap">
-      <iframe src="https://www.psytoolkit.org/experiment-library/experiment_stroop.html" allowfullscreen></iframe>
-    </div>
-    <p class="iframe-note">Complete the full task above, then click Next to continue.</p>
+    <p style="text-align:center; font-size:13px; color:var(--text3);">The task opens in a new tab. Come back here when you are done.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="setStep(6)">&larr; Back</button>
       <button class="btn btn-primary" onclick="setStep(8)">I have completed the task &rarr;</button>
     </div>
   </div>`;
 }
+
 
 function renderTimer() {
   const elapsed = state.timerElapsed;
@@ -702,26 +702,25 @@ function renderTimer() {
     </div>
   </div>`;
 }
-
 function renderCogTest2() {
   return `
   <div class="card">
     <div class="step-tag">Step 11 of 11 — Cognitive Task 2</div>
     <h2>Numerical Stroop Task</h2>
-    <p>One more cognitive test. Follow the on-screen instructions in the task window below. Complete the entire task before clicking Finish.</p>
-    <div class="warn-box">
-      <strong>Note:</strong> If the task does not load, you can <a href="https://www.psytoolkit.org/experiment-library/experiment_numerical_stroop.html" target="_blank" style="color:inherit;">open it in a new tab</a> and return when done.
+    <p>One more cognitive test. Click the button below to open the task in a new tab. Complete it fully, then return here and click Finish.</p>
+    <div style="text-align:center; margin: 2rem 0;">
+      <a href="https://www.psytoolkit.org/experiment-library/experiment_numerical_stroop.html" target="_blank" class="btn btn-primary" style="font-size:1.1rem; padding:14px 32px; text-decoration:none;">
+        🧪 Open Numerical Stroop Task →
+      </a>
     </div>
-    <div class="iframe-wrap">
-      <iframe src="https://www.psytoolkit.org/experiment-library/experiment_numerical_stroop.html" allowfullscreen></iframe>
-    </div>
-    <p class="iframe-note">Complete the full task above, then click Finish to submit your data.</p>
+    <p style="text-align:center; font-size:13px; color:var(--text3);">The task opens in a new tab. Come back here when you are done.</p>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="setStep(10)">&larr; Back</button>
       <button class="btn btn-primary" onclick="submitAndFinish()">Finish &amp; Submit ✓</button>
     </div>
   </div>`;
 }
+
 
 function renderThankYou() {
   return `
