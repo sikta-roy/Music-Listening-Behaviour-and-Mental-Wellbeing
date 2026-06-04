@@ -746,7 +746,7 @@ function renderThankYou() {
     </p>
   </div>`;
 }
-}
+
 
 // ─────────────────────────────────────────────
 // EVENT BINDING
