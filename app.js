@@ -736,7 +736,16 @@ function renderThankYou() {
       <span id="save-icon">⏳</span>
       <span id="save-text">Saving your data...</span>
     </div>
+  <div class="divider" style="margin-top:1.5rem;"></div>
+    <p style="font-size:1.1rem; font-family:'DM Serif Display',serif; color:var(--accent); margin-top:1.5rem; line-height:1.6;">
+      "Music gives a soul to the universe, wings to the mind, flight to the imagination, and life to everything."
+    </p>
+    <p style="font-size:13px; color:var(--text3); margin-top:0.5rem;">— Plato</p>
+    <p style="font-size:14px; color:var(--text2); margin-top:1rem;">
+      Keep listening to music 🎵 — it's one of the simplest ways to care for your mind.
+    </p>
   </div>`;
+}
 }
 
 // ─────────────────────────────────────────────
