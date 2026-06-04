@@ -886,12 +886,7 @@ const _origRender = render;
 const realRender = render;
 window.render = render;
 
-// Hook into step 8 to auto-start timer
-function afterRender() {
-  if (state.step === 8 && !state.timerDone) {
-    startTimer();
-  }
-}
+
 
 // ─────────────────────────────────────────────
 // DATA SUBMISSION
@@ -995,7 +990,12 @@ async function saveData() {
     console.error('Save error:', err, payload);
   }
 }
-
+// Hook into step 8 to auto-start timer
+function afterRender() {
+  if (state.step === 8 && !state.timerDone) {
+    startTimer();
+  }
+}
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
@@ -1014,7 +1014,7 @@ state.rrs1 = new Array(10).fill(undefined);
 state.panas2 = new Array(20).fill(undefined);
 state.rrs2 = new Array(10).fill(undefined);
 
-setStep(0);
+
 
 // ─────────────────────────────────────────────
 // MPQ-R HELPERS — update DOM in-place, no full re-render
@@ -1048,3 +1048,4 @@ function handleMusicRadio(key, value) {
   const detailWrap = document.getElementById(`${key}-detail-wrap`);
   if (detailWrap) detailWrap.style.display = value === 'No' ? 'none' : 'block';
 }
+setStep(0);
